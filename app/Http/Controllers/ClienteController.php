@@ -52,5 +52,20 @@ class ClienteController extends Controller
         return view('cliente.form', compact('data'));
     }
 
-
+    public function update(Request $request, $id)
+    {
+        $cliente = Cliente::findOrFail($id);
+        DB::beginTransaction();
+        try {
+            $cliente->update([
+                'nome' => $request['cliente']['nome']
+            ]);
+           
+            DB::commit();
+            return redirect('cliente')->with('success', 'Cliente atualizado com sucesso!');
+        } catch(\Exception $e) {
+            DB::rollback();
+            return redirect('cliente')->with('error', 'Erro no servidor! Cliente não atualizado!');
+        }
+    }
 }

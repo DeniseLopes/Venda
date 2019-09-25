@@ -16,5 +16,8 @@ Route::prefix('cliente')->group(function () {
     Route::get('create', 'ClienteController@create');
     Route::post('/', 'ClienteController@store');
     Route::get('{id}/edit', 'ClienteController@edit');
+    Route::put('{id}', 'ClienteController@update');
+    //Route::delete('{id}', 'ClienteController@destroy');
+    //Route::get('{id}/emprestimos', 'EmprestimoController@index');
 });
 
