@@ -12,6 +12,7 @@
                 <label><b>Nome</b></label>
                 <input type="text" value="{{old('cliente.nome', $data['cliente'] ? $data['cliente']->nome : '')}}" name="cliente[nome]" class="form-control">
                 <span>{{$errors->first('cliente.nome')}}</span>
+                <span>{{$errors->first('cliente.valor')}}</span>
             </div>
             <input type="submit" value="{{$data['cliente'] ? 'Atualizar' : 'Salvar'}}" class="btn btn-success">
         </form>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Venda</title>
+    <title>Gerenciamento Vendas</title>
 
     <!-- STYLES -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.min.css')}}">
@@ -17,7 +17,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand d-flex align-items-center" href="#">
-            <a href="{{url('/')}}" class="ml-2"><b>Venda</b></a>
+            <a href="{{url('/')}}" class="ml-2"><b>Gerenciamento Vendas</b></a>
         </a>
 
         <div class="collapse navbar-collapse" id="navbarToggler">

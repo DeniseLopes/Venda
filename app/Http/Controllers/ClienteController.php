@@ -11,7 +11,7 @@ class ClienteController extends Controller
         
         $data = [
             'clientesAtivos' => Cliente::all(),
-            //'clientesInativos' => Cliente::onlyTrashed()->get()
+            'clientesInativos' => Cliente::onlyTrashed()->get()
         ];
         return view('cliente.index', compact('data'));
     }
@@ -66,6 +66,18 @@ class ClienteController extends Controller
         } catch(\Exception $e) {
             DB::rollback();
             return redirect('cliente')->with('error', 'Erro no servidor! Cliente não atualizado!');
+        }
+    }
+
+    public function destroy($id)
+    {
+        $cliente = Cliente::withTrashed()->findOrFail($id);
+        if($cliente->trashed()) {
+            $cliente->restore();
+            return back()->with('success', 'Cliente ativado com sucesso!');
+        } else {
+            $cliente->delete();
+            return back()->with('success', 'Cliente desativado com sucesso!');
         }
     }
 }
