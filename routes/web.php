@@ -32,4 +32,15 @@ Route::prefix('produto')->group(function () {
 
 });
 
+//Compra
+Route::prefix('compra')->group(function () {
+    Route::get('/', 'CompraController@index');
+    Route::get('create', 'CompraController@create');
+    Route::post('/', 'CompraController@store');
+    Route::get('{id}/edit', 'CompraController@edit');
+    Route::put('{id}', 'CompraController@update');
+    Route::delete('{id}', 'CompraController@destroy');
+
+});
+
 

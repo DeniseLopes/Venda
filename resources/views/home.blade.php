@@ -15,6 +15,7 @@
                     <div class="card-body">
                     <a href="{{url('cliente')}}" class="btn btn-outline-secondary">Clientes</a>
                     <a href="{{url('produto')}}" class="btn btn-outline-secondary">Produtos</a>
+                    <a href="{{url('compra')}}" class="btn btn-outline-secondary">Venda</a>
                     </div>
                 </div>
             </div>
