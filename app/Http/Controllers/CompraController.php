@@ -17,8 +17,8 @@ class CompraController extends Controller
     {
         $data = [
             'compra' => '',
-            'url' => 'compra',
-            'method' => 'POST',
+            'url' => url('/compra'),
+         
             'clientes'=>Cliente::all(),
             'produtos'=>Produto::all(),
             'venda'   =>null
@@ -28,6 +28,7 @@ class CompraController extends Controller
 
     public function store(Request $request)
     {
+       dd($request->all());
 
     }
 }
