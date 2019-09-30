@@ -12,11 +12,11 @@ class Compra extends Model
     protected $fillable = ['data', 'cliente_id'];
   
 
-    public function Cliente(){
+    public function cliente(){
         return $this->belongsTo('App\Cliente');
     }
 
-    public function Produto(){
+    public function produtos(){
         return $this->belongsToMany('App\Produto','produto_has_compra','produto_id','compra_id')->withPivot('quantidade');
     }
 }

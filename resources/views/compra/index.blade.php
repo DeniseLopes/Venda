@@ -25,10 +25,11 @@
                         <tbody>
                             @foreach($compras as $compra)
                             <tr>
-                                <td>{{$compra->data}}</td>
                                 <td>{{$compra->cliente->nome}}</td>
+                                <td>{{$compra->created_at}}</td>
                                 <td>
                                     <div class="btn-group mr-2" role="group" aria-label="First group">
+                                        <a href="{{url('compra/'.$compra->id.'/show')}}" class="btn btn-info" style="margin-right:5px">Visualizar</a>
                                         <a href="{{url('compra/'.$compra->id.'/edit')}}" class="btn btn-warning" style="margin-right:5px">Editar</a>
                                         <form action="{{url('compra', [$compra->id])}}" method="POST">
                                             {{method_field('DELETE')}}

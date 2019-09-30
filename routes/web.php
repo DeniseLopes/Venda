@@ -40,7 +40,7 @@ Route::prefix('compra')->group(function () {
     Route::get('{id}/edit', 'CompraController@edit');
     Route::put('{id}', 'CompraController@update');
     Route::delete('{id}', 'CompraController@destroy');
-
+    Route::get('{id}/show', 'CompraController@show');
 });
 
 //rota ajax

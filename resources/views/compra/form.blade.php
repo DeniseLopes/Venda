@@ -13,7 +13,7 @@
             @csrf
             <div class="form-group col-md-12">
                 <label>Escolha o cliente:</label>
-                <select class="form-control" name="pessoa">
+                <select class="form-control" name="cliente">
                     <option>Selecione uma opção</option>
                     @foreach($data['clientes'] as $cliente)
                     <option value="{{$cliente->id}}">{{$cliente->nome}}</option>
@@ -73,12 +73,8 @@
             $(ultimo).remove();
         })
         $('.produto').change(function() {
-            // buscaProduto($(this).val())
             var id = $(this).val()
             buscaPreco($(this), id)
-
-            console.log($(this).val())
-
         })
         $('.quantidade').change(function() {
             var quantidade = $(this).val();
@@ -92,8 +88,6 @@
         var indice = 1
 
         function adicionarProduto() {
-            var ultimo = document.querySelectorAll(".adicionarProduto")
-            ultimo = ultimo[ultimo.length - 1]
             $("#inserir").append("<div class='form-row adicionarProduto'><div class='col-md-6'><label>Escolha os produtos:</label><select class='custom-select produto' onChange='buscaPreco($(this), this.value)'   name='produtos[" + indice + "]'><option>Selecione uma opção</option>@foreach($data['produtos'] as $produto)<option value='{{$produto->id}}'>{{$produto->nome}}</option>        @endforeach</select></div><div class='col-md-3'><label>Quantidade:</label><input type='text' name='quantidades[" + indice + "]' class='form-control quantidade' onChange=validaQuantidade($(this),this.value) placeholder='Quantidade'></div><div class='col-md-3'><label>Preço:</label><input type='text' name='valor[" + indice + "]' class='form-control preco'></div></div>")
             indice++
         }

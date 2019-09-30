@@ -16,8 +16,8 @@ class Compra extends Migration
         Schema::create('compra', function(Blueprint $table)
 		{
 			$table->increments('id');
-            $table->string('nome', 150);
-            $table->date('data');
+          
+            $table->integer('cliente_id')->insigned()->index('fk_cliente1');
 			$table->timestamps();
 			$table->softDeletes();
 		});
