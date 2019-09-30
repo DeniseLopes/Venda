@@ -90,4 +90,12 @@ class ProdutoController extends Controller
             return back()->with('success', 'Produto desativado com sucesso!');
         }
     }
+
+    public function buscaPreco(Request $request)
+    {
+
+        $preco = DB::table('produto')->select('valor')->where('id', $request->id)->get()->last();
+        return json_encode($preco);
+
+    }
 }

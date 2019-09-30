@@ -20,8 +20,14 @@ class CompraController extends Controller
             'url' => 'compra',
             'method' => 'POST',
             'clientes'=>Cliente::all(),
-            'produtos'=>Produto::all()
+            'produtos'=>Produto::all(),
+            'venda'   =>null
         ];
         return view('compra.form', compact('data'));
+    }
+
+    public function store(Request $request)
+    {
+
     }
 }

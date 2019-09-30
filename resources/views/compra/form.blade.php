@@ -1,75 +1,108 @@
-@extends('layouts.app')
-@section('content')
+@extends ("layouts.app")
+@section ("content")
+
 <div class="card">
-    <div class="card-header">{{$data['compra'] ? 'Editar compra' : 'Nova Compra'}}</div>
+    <div class="card-header">{{$data['produtos'] ? 'Editar produto' : 'Novo produto'}}</div>
     <div class="card-body">
-        <form method="POST" action="{{url($data['url'])}}">
-            @if($data['method'] == 'PUT')
+        <h3 style="padding-left: 50px">Cadastro de Vendas</h3>
+
+        <form method="POST" action="{{ $data['url'] }}">
+        @if(isset($data['venda']))
             @method('PUT')
             @endif
             @csrf
-            <div class="form-group">
-                <label><b>Nome</b></label>
-                <select name="cliente" id="" class="custom-select">
+            <div class="form-group col-md-12">
+                <label>Escolha o cliente:</label>
+                <select class="form-control" name="pessoa">
+                    <option>Selecione uma opção</option>
                     @foreach($data['clientes'] as $cliente)
-                    <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
+                    <option value="{{$cliente->id}}">{{$cliente->nome}}</option>
                     @endforeach
                 </select>
-                <span>{{$errors->first('cliente.nome')}}</span>
             </div>
-            <div class="mae">
-                <div class="form-row">
-                    <div class="col-sm-6">
-                        <label>Produto</label>
-                        <select name="produtos[0]" id="" class="custom-select">
-                            @foreach($data['produtos'] as $produto)
-                            <option value="{{ $produto->id }}">{{ $produto->nome }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class='col-sm-3'>
-                        <label><b>Preço</b></label>
-                        <input type='number' value='' name='preco[0]' class='form-control'>
-                    </div>
-                    <div class="col-sm-3">
-                        <label><b>Quantidade</b></label>
-                        <input type="number" value="" name="quantidades[0]" class="form-control">
-                    </div>
+
+
+            <div class="form-row adicionarProduto">
+                <div class=" col-md-6">
+                    <label>Escolha os produtos:</label>
+                    <select class="custom-select produto" name="produtos[0]">
+                        <option>Selecione</option>
+                        @foreach($data['produtos'] as $produto)
+                        <option value="{{$produto->id}}">{{$produto->nome}}</option>
+                        @endforeach
+                    </select>
                 </div>
-                <div id="inserir"></div>
-                <button class="btn btn-success addProduto" style="float:right; margin:30px 0 0 10px; ">Adicionar</button>
+                <div class=" col-md-3">
+                    <label>Quantidade:</label>
+                    <input type="text" name="quantidades[0]" class="form-control quantidade" placeholder="Quantidade">
+                </div>
+                <div class="col-md-3">
+                    <label>Preço:</label>
+                    <input type="text" name="valor[0]" class="form-control preco">
+                </div>
+            </div>
+
+            <div id="inserir"></div>
+
+            <div class="text-center">
+                <button type="button" class="btn btn-success add" style="float:right">Adicionar</button>
+            </div>
+            <div style="padding-left: 50px">
+                <button type="submit" class="btn btn-success">Cadastrar</button>
+                <a href="{{url('/')}}" class="btn btn-primary pull-right" data-toggle="modal">Voltar ao menu principal</a>
             </div>
         </form>
+
     </div>
 </div>
+
+
+
 @stop
 
-@yield('scripts')
+
 <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function() {
-        $('.addProduto').click(function(e) {
-            e.preventDefault();
-            var indice = 1
+<script type="text/javascript">
 
+	$(document).ready(function(){
+        $('.produto').change(function(){
+           // buscaProduto($(this).val())
+           var id = $(this).val()
+          buscaPreco($(this), id)
 
-            var ultimo = document.querySelectorAll(".form-row")
-            ultimo = ultimo[ultimo.length - 1]
-            $("#inserir").append("<div class='form-row'><div class='col-md-6'><div class='form-group'><label>Produtos</label><select class='form-control' name='produtos[" + indice + "]'><option>Selecione uma opção</option>@foreach($data['produtos'] as $produto)<option value='{{$produto->id}}'>{{$produto->nome}}</option>@endforeach</select></div></div>	                  	<div class='col-md-3'><div class='form-group'><label>Preço:</label><input type='text' name='preco[" + indice + "]' class='form-control' placeholder='preco'></div></div>        					<div class='col-md-3'><div class='form-group'><label>Quantidade:</label><input type='text' name='quantidades[" + indice + "]' class='form-control' placeholder='Quantidade'></div</div></div>")
-            indice++
-            recontar();
+            console.log($(this).val())
 
         })
-    })
-
-    function recontar() {
-
-        $.each($('.form-row'), function(index, element) {
-            $.each($(this).find('input,select'), function() {
-                name = $(this).attr('name').replace(/\d+/, index);
-                $(this).attr('name', name)
-            })
-            $(this).find('input,select').attr('name').replace(/\d+/, index)
-        })
+    $('.add').click(function(){
+      adicionarProduto()
+     })
+	var indice = 1
+	function adicionarProduto(){
+		var ultimo = document.querySelectorAll(".adicionarProduto")
+		ultimo = ultimo[ultimo.length -1]
+		$("#inserir").append("<div class='form-row adicionarProduto'><div class='col-md-6'><label>Escolha os produtos:</label><select class='custom-select produto' onChange='buscaPreco($(this), this.value)'   name='produtos[" + indice + "]'><option>Selecione uma opção</option>@foreach($data['produtos'] as $produto)<option value='{{$produto->id}}'>{{$produto->nome}}</option>        @endforeach</select></div><div class='col-md-3'><label>Quantidade:</label><input type='text' name='quantidades[" + indice + "]' class='form-control' placeholder='Quantidade'></div><div class='col-md-3'><label>Preço:</label><input type='text' name='valor[" + indice + "]' class='form-control preco'></div></div>")
+		indice++
     }
+     
+})
+function buscaPreco(select, id){
+             
+    console.log('select = '+ select + ' id ='+ id)
+           $.ajax({
+             url: '/buscaPreco',
+             type: 'POST',
+             data:{
+                 id:id,
+                 '_token': $('input[name=_token]').val(),
+             }
+         }).done(function(data){
+             console.log(data)
+             var preco = $.parseJSON(data)['valor']
+             console.log(preco)
+
+            select.parent().parent().find('input.preco').val(preco)
+         }).fail(function(){
+
+         })
+}
 </script>

@@ -29,7 +29,7 @@ Route::prefix('produto')->group(function () {
     Route::get('{id}/edit', 'ProdutoController@edit');
     Route::put('{id}', 'ProdutoController@update');
     Route::delete('{id}', 'ProdutoController@destroy');
-
+    
 });
 
 //Compra
@@ -43,4 +43,5 @@ Route::prefix('compra')->group(function () {
 
 });
 
-
+//rota ajax
+Route::post('buscaPreco', 'ProdutoController@buscaPreco');
