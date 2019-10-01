@@ -53,7 +53,7 @@
                         <select class="custom-select produto" name="produtos[0]">
                             <option>Selecione</option>
                             @foreach($data['produtos'] as $produto)
-                            <option value="{{$produto->id}}" ></option>
+                            <option value="{{$produto->id}}" >{{$produto->nome}}</option>
                             @endforeach
                         </select>
                     </div>
