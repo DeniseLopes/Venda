@@ -47,4 +47,40 @@
         </div>
     </div>
 </div>
+<!--Inativo-->
+
+        <div class="col-md-12 mt-4">
+            <div class="card">
+                <div class="card-header">Vendas Inativas</div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nome do Cliente</th>
+                                <th>Data</th>
+                                <th colspan='3'>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($comprasInativas as $compra)
+                            <tr>
+                                <td>{{$compra->cliente->nome}}</td>
+                                <td>{{$compra->created_at}}</td>
+                                <td>
+                                   
+                                        
+                                        <form action="{{url('compra', [$compra->id])}}" method="POST">
+                                            {{method_field('DELETE')}}
+                                            {{ csrf_field() }}
+                                            <input type="submit" class="btn btn-danger" value="Ativar" />
+                                        </form>
+                                   
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 @endsection

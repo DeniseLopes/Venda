@@ -12,11 +12,13 @@ class CompraController extends Controller
     public function index()
     {
         $compras = Compra::all();
-        return view('compra.index', compact('compras'));
+        $comprasInativas = Compra::onlyTrashed()->get();
+        return view('compra.index', compact('compras', 'comprasInativas'));
     }
 
     public function create()
     {
+
         $data = [
             'compra' => '',
             'url' => url('/compra'),
@@ -25,13 +27,15 @@ class CompraController extends Controller
             'venda'    => null,
             'title'    => 'Criar Venda',
             'button'   => 'Cadastrar',
+            'method' => 'PUT',
+
         ];
         return view('compra.form', compact('data'));
     }
 
     public function store(Request $request)
     {
-
+        //dd($request->all());
         DB::beginTransaction();
 
         try {
@@ -40,6 +44,7 @@ class CompraController extends Controller
             $compra = new Compra;
 
             $compra->cliente()->associate($cliente)->save();
+
             foreach ($request['produtos'] as $key => $produto) {
                 $compra->produtos()->attach($produto, array('quantidade' => $request['quantidades'][$key]));
             }
@@ -69,9 +74,10 @@ class CompraController extends Controller
             'url'   => url('/compra/' . $id),
             'title' => 'Editar Vendas',
             'button' => 'Atualizar',
-            'clientes'=>Cliente::all(),
+            'clientes' => Cliente::all(),
             'venda' => Compra::findOrFail($id),
-            'produtos'=>Produto::all(),
+            'produtos' => Produto::all(),
+            'method' => 'PUT',
 
         ];
         return view('compra.form', compact('data'));
@@ -80,21 +86,37 @@ class CompraController extends Controller
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
+
         try {
-            $venda = Compra::find($id);
-            $vendaNova = new Compra;
-            $vendaNova->cliente()->associate($venda->cliente)->save();
-            foreach ($request['produtos'] as $key => $produto) {
-                $vendaNova->produtos()->attach($produto, array('quantidade' => $request['quantidades'][$key]));
+            //   dd($request->all());
+            $cliente = Cliente::findOrFail($request->cliente);
+            $compra = Compra::findOrFail($id);
+            $compra->cliente()->associate($cliente)->save();
+            $ids = array();
+            foreach ($compra->produtos as $produto) {
+                $ids[] = $produto->id;
             }
-            $venda = $vendaNova;
-            dd($venda);
-            $venda->save();
+            $compra->produtos()->detach($ids);
+            foreach ($request['produtos'] as $key => $produto) {
+                $compra->produtos()->attach($produto, array('quantidade' => $request['quantidades'][$key]));
+            }
             DB::commit();
-            return redirect('/compra')->with('success', 'Venda atualizada com sucesso!');
-        } catch (\Exception $e) {
+            return redirect('compra/' . $compra->id . '/show')->with("success", "venda alterada com sucesso");
+        } catch (Exception $e) {
             DB::rollback();
-            return redirect('/compra')->with('error', 'codigo:'.$e->getMessage());
+            return $e->getMessage();
+        }
+    }
+
+    public function destroy($id)
+    {
+        $compra = Compra::withTrashed()->findOrFail($id);
+        if ($compra->trashed()) {
+            $compra->restore();
+            return back()->with('success', 'Produto ativado com sucesso!');
+        } else {
+            $compra->delete();
+            return back()->with('success', 'Produto desativado com sucesso!');
         }
     }
 }
